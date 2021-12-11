@@ -1,21 +1,23 @@
 import requests
-import secrets
+import secret
 from flask import Flask, render_template
 
-nyt = 'https://api.nytimes.com/svc/topstories/v2/technology.json'
-params = {'api-key':secrets.API_KEY}
-nytResponse = requests.get(nyt, params)
-nytJson = nytResponse.json()
 
-titles = []
+def get_articles():
+    nyt = 'https://api.nytimes.com/svc/topstories/v2/technology.json'
+    params = {'api-key':secret.API_KEY}
+    nytResponse = requests.get(nyt, params).json()['results']
+    articles = nytResponse[:5]
+#    for i in range(5):
+#        titles.append(nytResponse['results'][i]['title'])
+#    return titles
+    return articles
 
-for i in range(5):
-    titles.append(nytJson['results'][i]['title'])
 
 app = Flask(__name__)
 @app.route('/')
 def welcome():
-    return '<h1>Welcome. :)</h1>'
+    return '<h1>Welcome!</h1>'
 
 @app.route('/name/<nm>')
 def name(nm):
@@ -23,7 +25,18 @@ def name(nm):
 
 @app.route('/headlines/<nm>')
 def headlines(nm):
-    return render_template('headlines.html', name=nm, headlines=titles)
+    articles = get_articles()
+    articles = [a['title'] for a in articles]
+    return render_template('headlines.html', name=nm, headlines=articles)
+
+@app.route('/links/<nm>')
+def link(nm):
+    articles = get_articles()
+    headlines = [a['title'] for a in articles]
+    links = [a['url'] for a in articles]
+    return render_template('links.html', name=nm, headlines=headlines, links=links)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
