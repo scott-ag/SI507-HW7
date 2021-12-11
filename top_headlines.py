@@ -36,6 +36,13 @@ def link(nm):
     links = [a['url'] for a in articles]
     return render_template('links.html', name=nm, headlines=headlines, links=links)
 
+@app.route('/tables/<nm>')
+def table(nm):
+    articles = get_articles()
+    headlines = [a['title'] for a in articles]
+    links = [a['url'] for a in articles]
+    images = [a['multimedia'][0]['url'] for a in articles]
+    return render_template('tables.html', name=nm, headlines=headlines, links=links, images=images)
 
 
 if __name__ == '__main__':
