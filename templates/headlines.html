@@ -1,1 +1,16 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Hello, {{name}}!</h1>
+<h2>Today's technology headlines, <i>{{name}}</i>, are: </h2>
+<ol>
+    {% for story in headlines %}
+    <li>{{story}}</li>
+    {% endfor %}
+</ol>
+</body>
+</html>
